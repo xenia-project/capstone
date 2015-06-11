@@ -77,7 +77,7 @@ struct ContextDecision {
  */
 static InstructionContext contextForAttrs(uint16_t attrMask)
 {
-	return CONTEXTS_SYM[attrMask];
+	return (InstructionContext)CONTEXTS_SYM[attrMask];
 }
 
 /*
@@ -1005,7 +1005,7 @@ static int getIDWithAttrMask(uint16_t *instructionID,
 
 	hasModRMExtension = modRMRequired(insn->opcodeType,
 			instructionClass,
-			insn->opcode);
+			insn->opcode) != 0;
 
 	if (hasModRMExtension) {
 		if (readModRM(insn))
@@ -1866,7 +1866,7 @@ static int readVVVV(struct InternalInstruction *insn)
 	if (insn->mode != MODE_64BIT)
 		vvvv &= 0x7;
 
-	insn->vvvv = vvvv;
+	insn->vvvv = (Reg)vvvv;
 
 	return 0;
 }
@@ -2231,7 +2231,7 @@ int decodeInstruction(struct InternalInstruction *insn,
 		DisassemblerMode mode)
 {
 	insn->reader = reader;
-	insn->readerArg = readerArg;
+	insn->readerArg = (const reader_info*)readerArg;
 	insn->startLocation = startLoc;
 	insn->readerCursor = startLoc;
 	insn->mode = mode;

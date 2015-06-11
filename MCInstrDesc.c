@@ -7,12 +7,12 @@
 /// the predicate operand that controls an isPredicable() instruction.
 bool MCOperandInfo_isPredicate(MCOperandInfo *m)
 {
-	return m->Flags & (1 << MCOI_Predicate);
+	return (m->Flags & (1 << MCOI_Predicate)) != 0;
 }
 
 /// isOptionalDef - Set if this operand is a optional def.
 ///
 bool MCOperandInfo_isOptionalDef(MCOperandInfo *m)
 {
-	return m->Flags & (1 << MCOI_OptionalDef);
+	return (m->Flags & (1 << MCOI_OptionalDef)) != 0;
 }

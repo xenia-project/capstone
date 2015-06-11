@@ -27,15 +27,16 @@ typedef struct MCInst MCInst;
 typedef struct cs_struct cs_struct;
 typedef struct MCOperand MCOperand;
 
+enum MachineOperandType {
+  kInvalid = 0,                 ///< Uninitialized.
+  kRegister,                ///< Register operand.
+  kImmediate,               ///< Immediate operand.
+  kFPImmediate,             ///< Floating-point immediate operand.
+};
+
 /// MCOperand - Instances of this class represent operands of the MCInst class.
 /// This is a simple discriminated union.
 struct MCOperand {
-	enum {
-		kInvalid = 0,                 ///< Uninitialized.
-		kRegister,                ///< Register operand.
-		kImmediate,               ///< Immediate operand.
-		kFPImmediate,             ///< Floating-point immediate operand.
-	} MachineOperandType;
 	unsigned char Kind;
 
 	union {

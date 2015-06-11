@@ -117,7 +117,7 @@ bool cs_support(int query)
 				(1 << CS_ARCH_SYSZ) | (1 << CS_ARCH_XCORE));
 
 	if ((unsigned int)query < CS_ARCH_MAX)
-		return all_arch & (1 << query);
+		return (all_arch & (1 << query)) != 0;
 
 	if (query == CS_SUPPORT_DIET) {
 #ifdef CAPSTONE_DIET
@@ -197,7 +197,7 @@ cs_err cs_open(cs_arch arch, cs_mode mode, csh *handle)
 	archs_enable();
 
 	if (arch < CS_ARCH_MAX && arch_init[arch]) {
-		ud = cs_mem_calloc(1, sizeof(*ud));
+		ud = (cs_struct*)cs_mem_calloc(1, sizeof(*ud));
 		if (!ud) {
 			// memory insufficient
 			return CS_ERR_MEM;
@@ -206,7 +206,7 @@ cs_err cs_open(cs_arch arch, cs_mode mode, csh *handle)
 		ud->errnum = CS_ERR_OK;
 		ud->arch = arch;
 		ud->mode = mode;
-		ud->big_endian = mode & CS_MODE_BIG_ENDIAN;
+		ud->big_endian = (mode & CS_MODE_BIG_ENDIAN) != 0;
 		// by default, do not break instruction into details
 		ud->detail = CS_OPT_OFF;
 
@@ -458,7 +458,7 @@ size_t cs_disasm(csh ud, const uint8_t *buffer, size_t size, uint64_t offset, si
 		return 0;
 	}
 
-	insn_cache = total;
+	insn_cache = (cs_insn*)total;
 
 	while (size > 0) {
 		MCInst_Init(&mci);
@@ -469,7 +469,7 @@ size_t cs_disasm(csh ud, const uint8_t *buffer, size_t size, uint64_t offset, si
 
 		if (handle->detail) {
 			// allocate memory for @detail pointer
-			insn_cache->detail = cs_mem_malloc(sizeof(cs_detail));
+			insn_cache->detail = (cs_detail*)cs_mem_malloc(sizeof(cs_detail));
 		} else {
 			insn_cache->detail = NULL;
 		}
@@ -603,7 +603,7 @@ size_t cs_disasm(csh ud, const uint8_t *buffer, size_t size, uint64_t offset, si
 		total = tmp;
 	}
 
-	*insn = total;
+	*insn = (cs_insn*)total;
 
 	return c;
 }
@@ -634,7 +634,7 @@ cs_insn *cs_malloc(csh ud)
 	cs_insn *insn;
 	struct cs_struct *handle = (struct cs_struct *)(uintptr_t)ud;
 
-	insn = cs_mem_malloc(sizeof(cs_insn));
+	insn = (cs_insn*)cs_mem_malloc(sizeof(cs_insn));
 	if (!insn) {
 		// insufficient memory
 		handle->errnum = CS_ERR_MEM;
@@ -642,7 +642,7 @@ cs_insn *cs_malloc(csh ud)
 	} else {
 		if (handle->detail) {
 			// allocate memory for @detail pointer
-			insn->detail = cs_mem_malloc(sizeof(cs_detail));
+			insn->detail = (cs_detail*)cs_mem_malloc(sizeof(cs_detail));
 			if (insn->detail == NULL) {	// insufficient memory
 				cs_mem_free(insn);
 				handle->errnum = CS_ERR_MEM;

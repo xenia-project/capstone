@@ -57,7 +57,7 @@
 #define lFromEVEX4of4(evex)     (((evex) & 0x20) >> 5)
 #define bFromEVEX4of4(evex)     (((evex) & 0x10) >> 4)
 #define v2FromEVEX4of4(evex)    (((~evex) & 0x8) >> 3)
-#define aaaFromEVEX4of4(evex)   ((evex) & 0x7)
+#define aaaFromEVEX4of4(evex)   (Reg)((evex) & 0x7)
 
 #define rFromVEX2of3(vex)       (((~(vex)) & 0x80) >> 7)
 #define xFromVEX2of3(vex)       (((~(vex)) & 0x40) >> 6)
@@ -591,7 +591,7 @@ typedef struct InternalInstruction {
   /* Reader interface (C) */
   byteReader_t reader;
   /* Opaque value passed to the reader */
-  const void* readerArg;
+  const reader_info* readerArg;
   /* The address of the next byte to read via the reader */
   uint64_t readerCursor;
 

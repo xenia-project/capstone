@@ -66,12 +66,12 @@ unsigned int count_positive(unsigned char *list)
 char *cs_strdup(const char *str)
 {
 	size_t len = strlen(str)+ 1;
-	void *new = cs_mem_malloc(len);
+	void *result = cs_mem_malloc(len);
 
-	if (new == NULL)
+	if (result == NULL)
 		return NULL;
 
-	return (char *)memmove(new, str, len);
+	return (char *)memmove(result, str, len);
 }
 
 // we need this since Windows doesnt have snprintf()

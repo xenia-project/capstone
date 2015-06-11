@@ -41,7 +41,7 @@ enum {
 
 static x86_reg sib_index_map[] = {
 	X86_REG_INVALID,
-#define ENTRY(x) X86_REG_##x,
+#define ENTRY(x) (x86_reg)X86_REG_##x,
 	ALL_EA_BASES
 	REGS_XMM
 	REGS_YMM
@@ -47364,7 +47364,7 @@ x86_reg X86_insn_reg_intel(unsigned int id)
 	}
 
 	// not found
-	return 0;
+	return (x86_reg)0;
 }
 
 bool X86_insn_reg_intel2(unsigned int id, x86_reg *reg1, x86_reg *reg2)
@@ -47412,7 +47412,7 @@ x86_reg X86_insn_reg_att(unsigned int id)
 	}
 
 	// not found
-	return 0;
+	return (x86_reg)0;
 }
 
 // given MCInst's id, find out if this insn is valid for REPNE prefix
@@ -47644,7 +47644,7 @@ void op_addReg(MCInst *MI, int reg)
 {
 	if (MI->csh->detail) {
 		MI->flat_insn->detail->x86.operands[MI->flat_insn->detail->x86.op_count].type = X86_OP_REG;
-		MI->flat_insn->detail->x86.operands[MI->flat_insn->detail->x86.op_count].reg = reg;
+		MI->flat_insn->detail->x86.operands[MI->flat_insn->detail->x86.op_count].reg = (x86_reg)reg;
 		MI->flat_insn->detail->x86.operands[MI->flat_insn->detail->x86.op_count].size = MI->csh->regsize_map[reg];
 		MI->flat_insn->detail->x86.op_count++;
 	}
@@ -47676,21 +47676,21 @@ void op_addImm(MCInst *MI, int v)
 void op_addSseCC(MCInst *MI, int v)
 {
 	if (MI->csh->detail) {
-		MI->flat_insn->detail->x86.sse_cc = v;
+		MI->flat_insn->detail->x86.sse_cc = (x86_sse_cc)v;
 	}
 }
 
 void op_addAvxCC(MCInst *MI, int v)
 {
 	if (MI->csh->detail) {
-		MI->flat_insn->detail->x86.avx_cc = v;
+		MI->flat_insn->detail->x86.avx_cc = (x86_avx_cc)v;
 	}
 }
 
 void op_addAvxRoundingMode(MCInst *MI, int v)
 {
 	if (MI->csh->detail) {
-		MI->flat_insn->detail->x86.avx_rm = v;
+		MI->flat_insn->detail->x86.avx_rm = (x86_avx_rm)v;
 	}
 }
 
