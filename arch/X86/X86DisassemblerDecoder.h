@@ -591,7 +591,7 @@ typedef struct InternalInstruction {
   /* Reader interface (C) */
   byteReader_t reader;
   /* Opaque value passed to the reader */
-  const reader_info* readerArg;
+  const struct reader_info* readerArg;
   /* The address of the next byte to read via the reader */
   uint64_t readerCursor;
 

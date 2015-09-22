@@ -2231,7 +2231,7 @@ int decodeInstruction(struct InternalInstruction *insn,
 		DisassemblerMode mode)
 {
 	insn->reader = reader;
-	insn->readerArg = (const reader_info*)readerArg;
+	insn->readerArg = (const struct reader_info*)readerArg;
 	insn->startLocation = startLoc;
 	insn->readerCursor = startLoc;
 	insn->mode = mode;
